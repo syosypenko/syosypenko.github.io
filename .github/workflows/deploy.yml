@@ -34,6 +34,8 @@ jobs:
       - name: Build
         run: npm run build
         env:
+          # Note: API keys in static sites are exposed in the client bundle.
+          # Consider using a backend proxy for production use.
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         
       - name: Setup Pages
