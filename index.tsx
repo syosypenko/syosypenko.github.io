@@ -159,7 +159,8 @@ function init() {
 }
 
 // --- AI CHATBOT ---
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+const geminiApiKey = import.meta.env.VITE_GEMINI_API_KEY as string | undefined;
+const ai = new GoogleGenAI({ apiKey: geminiApiKey });
 const SYSTEM_INSTRUCTION = `
 You are the AI "Digital Twin" of Serhiy Yosypenko. Professional, data-driven, and technical.
 Current Location: ${PROFILE.location}.

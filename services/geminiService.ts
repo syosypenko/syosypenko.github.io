@@ -2,7 +2,8 @@
 import { GoogleGenAI } from "@google/genai";
 import { PROFILE, PROJECTS, SKILLS, EXPERIENCE, EDUCATION } from "../constants";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+const geminiApiKey = import.meta.env.VITE_GEMINI_API_KEY as string | undefined;
+const ai = new GoogleGenAI({ apiKey: geminiApiKey });
 
 const SYSTEM_INSTRUCTION = `
 You are the AI "Digital Twin" of Serhiy Yosypenko, a Senior Software Engineer. Your goal is to represent Serhiy professionally to recruiters and collaborators.

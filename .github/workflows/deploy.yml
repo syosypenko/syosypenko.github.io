@@ -36,7 +36,7 @@ jobs:
         env:
           # Note: API keys in static sites are exposed in the client bundle.
           # Consider using a backend proxy for production use.
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          VITE_GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         
       - name: Setup Pages
         uses: actions/configure-pages@v4
