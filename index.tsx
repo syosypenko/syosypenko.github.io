@@ -1,6 +1,4 @@
 
-import { GoogleGenAI } from "@google/genai";
-
 // --- DATA ---
 const PROFILE = {
   name: "Serhiy Yosypenko",
@@ -157,72 +155,6 @@ function init() {
     `;
   }
 }
-
-// --- AI CHATBOT ---
-const geminiApiKey = import.meta.env.VITE_GEMINI_API_KEY as string | undefined;
-const ai = new GoogleGenAI({ apiKey: geminiApiKey });
-const SYSTEM_INSTRUCTION = `
-You are the AI "Digital Twin" of Serhiy Yosypenko. Professional, data-driven, and technical.
-Current Location: ${PROFILE.location}.
-Bio: ${PROFILE.bio}.
-CV Link: ${PROFILE.cvUrl}.
-If asked for his CV, always provide that link.
-`;
-
-const chatMessages = document.getElementById('chat-messages');
-// Fix: Cast chatInput to HTMLInputElement to access 'value' property and handle potential null values
-const chatInput = document.getElementById('chat-input') as HTMLInputElement | null;
-const chatToggle = document.getElementById('chat-toggle');
-const chatWindow = document.getElementById('chat-window');
-
-function appendMessage(role: string, text: string) {
-  if (!chatMessages) return;
-  const msgDiv = document.createElement('div');
-  msgDiv.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
-  msgDiv.innerHTML = `<div class="max-w-[80%] p-3 rounded-2xl text-sm ${role === 'user' ? 'bg-blue-600 text-white rounded-br-none' : 'bg-white/10 text-slate-200 rounded-bl-none'}">${text}</div>`;
-  chatMessages.appendChild(msgDiv);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
-async function handleChat() {
-  if (!chatInput) return;
-  // Fix: Property 'value' now exists due to casting chatInput to HTMLInputElement
-  const text = chatInput.value.trim();
-  if (!text) return;
-  chatInput.value = '';
-  appendMessage('user', text);
-  
-  try {
-    const response = await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
-      contents: text,
-      config: { systemInstruction: SYSTEM_INSTRUCTION }
-    });
-    appendMessage('model', response.text || "I'm not sure about that.");
-  } catch (err) {
-    appendMessage('model', "Sorry, I'm offline at the moment.");
-  }
-}
-
-if (chatToggle) {
-  chatToggle.addEventListener('click', () => {
-    if (chatWindow) {
-      chatWindow.classList.toggle('chat-closed');
-      chatWindow.classList.toggle('chat-open');
-    }
-    const openIcon = document.getElementById('chat-icon-open');
-    const closeIcon = document.getElementById('chat-icon-close');
-    if (openIcon) openIcon.classList.toggle('hidden');
-    if (closeIcon) closeIcon.classList.toggle('hidden');
-  });
-}
-
-const chatSend = document.getElementById('chat-send');
-if (chatSend) chatSend.addEventListener('click', handleChat);
-if (chatInput) chatInput.addEventListener('keydown', e => e.key === 'Enter' && handleChat());
-
-// Welcome message
-appendMessage('model', "Hi! I'm Serhiy's AI assistant. How can I help you today?");
 
 // Start the app
 init();

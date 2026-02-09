@@ -2,7 +2,6 @@
 import React from 'react';
 import { PROFILE, PROJECTS, SKILLS, EXPERIENCE, EDUCATION } from './constants';
 import ProjectCard from './components/ProjectCard';
-import ChatBot from './components/ChatBot';
 
 const App: React.FC = () => {
   return (
@@ -218,7 +217,6 @@ const App: React.FC = () => {
         </div>
       </footer>
 
-      <ChatBot />
     </div>
   );
 };
