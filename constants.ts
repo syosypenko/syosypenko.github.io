@@ -10,7 +10,7 @@ export const PROFILE = {
   bio: "Software Engineer with 8+ years of experience in Ruby on Rails and Python, specializing in scalable web applications and API development. Strong background in automation, system integrations, CI/CD pipelines, and DevOps. Actively expanding expertise in Python and AI-powered backend solutions.",
   github: "https://github.com/syosypenko",
   linkedin: "https://www.linkedin.com/in/syosypenko/",
-  cvUrl: "https://github.com/syosypenko/syosypenko.github.io/raw/main/Serhiy_Yosypenko_CV.pdf", // Placeholder for actual CV file
+  cvUrl: "/resume-serhiy-yosypenko.pdf",
   languages: ["English (Professional)", "German (Intermediate - B1)"],
 };
 
