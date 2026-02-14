@@ -1,10 +1,24 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { PROFILE, PROJECTS, SKILLS, EXPERIENCE } from './constants';
 import ProjectCard from './components/ProjectCard';
 
 const App: React.FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
 
   return (
     <div className="min-h-screen selection:bg-blue-500/30">
@@ -16,12 +30,14 @@ const App: React.FC = () => {
             <div className="h-6 w-[1px] bg-white/10 mx-2 hidden md:block"></div>
             <span className="hidden md:block font-mono text-xs opacity-50 tracking-tighter uppercase">Innsbruck • software_engineer</span>
           </div>
+
+          {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-8">
             <a href="#experience" className="text-sm font-medium text-slate-400 hover:text-white transition-colors">Experience</a>
             <a href="#projects" className="text-sm font-medium text-slate-400 hover:text-white transition-colors">Projects</a>
             <a href="#skills" className="text-sm font-medium text-slate-400 hover:text-white transition-colors">Tech Stack</a>
             
-            <div className="relative">
+            <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 className="px-5 py-2 rounded-lg bg-white/10 text-sm font-bold hover:bg-white/20 transition-all flex items-center gap-2 text-slate-200"
@@ -54,8 +70,40 @@ const App: React.FC = () => {
 
             <a href={`mailto:${PROFILE.email}`} className="px-5 py-2 rounded-lg bg-blue-600 text-sm font-bold hover:bg-blue-500 transition-all shadow-lg shadow-blue-500/20">Hire Me</a>
           </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="md:hidden p-2 text-slate-300 hover:text-white z-50 relative"
+          >
+            {isMobileMenuOpen ? (
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            ) : (
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+            )}
+          </button>
         </div>
       </nav>
+
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-40 bg-slate-950/98 backdrop-blur-xl md:hidden flex flex-col items-center justify-center p-8 space-y-8">
+          <a href="#experience" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-300 hover:text-white">Experience</a>
+          <a href="#projects" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-300 hover:text-white">Projects</a>
+          <a href="#skills" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-300 hover:text-white">Tech Stack</a>
+          
+          <div className="flex flex-col items-center gap-4 w-full pt-4 border-t border-white/10">
+            <p className="text-sm font-bold text-blue-500 uppercase tracking-widest">Download CV</p>
+            <div className="flex gap-4">
+               <a href="/resume-serhiy-yosypenko.pdf" target="_blank" className="px-4 py-2 bg-white/10 rounded-lg text-sm font-bold">English</a>
+               <a href="/resume-serhiy-yosypenko-de.pdf" target="_blank" className="px-4 py-2 bg-white/10 rounded-lg text-sm font-bold">German</a>
+            </div>
+          </div>
+
+          <a href={`mailto:${PROFILE.email}`} className="px-8 py-3 rounded-xl bg-blue-600 text-lg font-bold hover:bg-blue-500 shadow-lg shadow-blue-500/20 w-full text-center">Hire Me</a>
+        </div>
+      )}
+
 
       {/* Hero Section */}
       <section id="about" className="pt-40 pb-20 px-6">
