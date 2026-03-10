@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Building an AI-Powered Document Processing Workflow with Zapier</title>
+    <meta
+      name="description"
+      content="A walkthrough of a Zapier workflow that watches Google Drive, uses Gemini for analysis, refines text with AI by Zapier, and creates Gmail drafts for human review."
+    />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #020617;
+        --panel: rgba(15, 23, 42, 0.78);
+        --panel-border: rgba(148, 163, 184, 0.14);
+        --text: #e2e8f0;
+        --muted: #94a3b8;
+        --accent: #60a5fa;
+        --accent-soft: rgba(96, 165, 250, 0.18);
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background:
+          radial-gradient(circle at top, rgba(37, 99, 235, 0.18), transparent 30%),
+          linear-gradient(180deg, #020617 0%, #0f172a 100%);
+        color: var(--text);
+        line-height: 1.7;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .container {
+        width: min(1120px, calc(100% - 2rem));
+        margin: 0 auto;
+      }
+
+      .hero {
+        padding: 4.5rem 0 3rem;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.35rem 0.75rem;
+        border-radius: 999px;
+        background: var(--accent-soft);
+        color: #bfdbfe;
+        border: 1px solid rgba(96, 165, 250, 0.22);
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 2rem;
+        align-items: center;
+        margin-top: 1.5rem;
+      }
+
+      h1 {
+        font-size: clamp(2.6rem, 5vw, 4.8rem);
+        line-height: 0.98;
+        margin: 1rem 0 1.25rem;
+        letter-spacing: -0.04em;
+      }
+
+      .lead {
+        color: var(--muted);
+        font-size: 1.1rem;
+        max-width: 62ch;
+      }
+
+      .hero-card,
+      .section,
+      .callout,
+      .step {
+        background: var(--panel);
+        border: 1px solid var(--panel-border);
+        border-radius: 24px;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 24px 80px rgba(2, 6, 23, 0.35);
+      }
+
+      .hero-card {
+        overflow: hidden;
+      }
+
+      .hero-card img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+
+      .hero-card .caption {
+        padding: 1rem 1.25rem 1.25rem;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
+        margin: 2rem 0 0;
+      }
+
+      .stat {
+        padding: 1rem 1.1rem;
+        background: rgba(15, 23, 42, 0.72);
+        border: 1px solid rgba(148, 163, 184, 0.1);
+        border-radius: 20px;
+      }
+
+      .stat strong {
+        display: block;
+        font-size: 1.25rem;
+        margin-bottom: 0.2rem;
+      }
+
+      main {
+        padding-bottom: 5rem;
+      }
+
+      .section {
+        padding: 2rem;
+        margin-top: 1.5rem;
+      }
+
+      h2 {
+        margin: 0 0 1rem;
+        font-size: 1.8rem;
+        letter-spacing: -0.03em;
+      }
+
+      p,
+      li {
+        color: var(--muted);
+      }
+
+      ul {
+        margin: 0.75rem 0 0;
+        padding-left: 1.25rem;
+      }
+
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+        margin-top: 1.5rem;
+      }
+
+      .step {
+        padding: 1.5rem;
+      }
+
+      .step-number {
+        display: inline-flex;
+        width: 2rem;
+        height: 2rem;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        background: var(--accent-soft);
+        color: #dbeafe;
+        font-weight: 700;
+        margin-bottom: 1rem;
+      }
+
+      .step h3 {
+        margin: 0 0 0.65rem;
+        font-size: 1.15rem;
+      }
+
+      .callout {
+        padding: 1.5rem;
+        margin-top: 1.5rem;
+      }
+
+      blockquote {
+        margin: 1rem 0 0;
+        padding: 1rem 1.25rem;
+        border-left: 3px solid var(--accent);
+        background: rgba(15, 23, 42, 0.72);
+        border-radius: 0 16px 16px 0;
+        color: #cbd5e1;
+      }
+
+      .footer-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        color: #bfdbfe;
+        font-weight: 600;
+      }
+
+      @media (max-width: 900px) {
+        .hero-grid,
+        .steps,
+        .stats {
+          grid-template-columns: 1fr;
+        }
+
+        .hero {
+          padding-top: 3rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="hero">
+      <div class="container">
+        <a class="eyebrow" href="/">← Back to portfolio</a>
+        <div class="hero-grid">
+          <div>
+            <div class="eyebrow" style="margin-top: 1.25rem;">Automation case study</div>
+            <h1>Building an AI-Powered Document Processing Workflow with Zapier</h1>
+            <p class="lead">
+              This workflow turns a simple file upload into an AI-assisted document pipeline. Zapier watches Google Drive,
+              sends each new file to Gemini for analysis, cleans the model output with AI by Zapier, and creates a Gmail draft
+              for safe human review.
+            </p>
+            <div class="stats">
+              <div class="stat">
+                <strong>4 steps</strong>
+                <span>Trigger, analyze, clean, draft</span>
+              </div>
+              <div class="stat">
+                <strong>Drive</strong>
+                <span>New files start the flow</span>
+              </div>
+              <div class="stat">
+                <strong>Gemini</strong>
+                <span>Extracts context and content</span>
+              </div>
+              <div class="stat">
+                <strong>Gmail</strong>
+                <span>Drafts keep review in the loop</span>
+              </div>
+            </div>
+          </div>
+
+          <figure class="hero-card">
+            <img src="../../Screenshot%202026-03-10%20at%2016.20.48.png" alt="Zapier workflow screenshot showing Google Drive, Gemini, AI by Zapier, and Gmail steps" />
+            <figcaption class="caption">
+              The workflow chains Google Drive, Gemini, AI by Zapier, and Gmail into one review-friendly automation.
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="section">
+        <h2>Workflow architecture</h2>
+        <p>
+          The automation is built as a linear pipeline with one clear responsibility per step. That separation keeps the flow easy to debug,
+          easy to evolve, and safe to test. New files arrive from Google Drive, the document content is interpreted by Gemini,
+          the response is normalized into plain text, and the final output is prepared as a Gmail draft.
+        </p>
+      </section>
+
+      <section class="section">
+        <h2>Step-by-step breakdown</h2>
+        <div class="steps">
+          <article class="step">
+            <div class="step-number">1</div>
+            <h3>Google Drive trigger</h3>
+            <p>
+              Zapier monitors a dedicated Drive folder and starts the automation whenever a new document appears.
+              This event-driven entry point removes manual polling and keeps document handling near real time.
+            </p>
+            <ul>
+              <li>Text documents and reports</li>
+              <li>Structured notes and uploaded files</li>
+              <li>Simple, reliable workflow entry point</li>
+            </ul>
+          </article>
+
+          <article class="step">
+            <div class="step-number">2</div>
+            <h3>Gemini analysis</h3>
+            <p>
+              The uploaded file is passed to Gemini through Google AI Studio. At this stage the model reads the document,
+              identifies relevant information, and prepares structured output that the next step can consume.
+            </p>
+            <ul>
+              <li>Reads document content</li>
+              <li>Understands context instead of forwarding raw text</li>
+              <li>Extracts signal for downstream actions</li>
+            </ul>
+          </article>
+
+          <article class="step">
+            <div class="step-number">3</div>
+            <h3>AI by Zapier cleanup</h3>
+            <p>
+              After the LLM response arrives, AI by Zapier converts it into plain, email-ready text. This stage is intentionally narrow:
+              it strips structural formatting and keeps only the content needed for the final message body.
+            </p>
+            <blockquote>
+              Return plain text suitable for Gmail, without any structural formatting or extra content. Extract only the text needed for the next steps.
+            </blockquote>
+          </article>
+
+          <article class="step">
+            <div class="step-number">4</div>
+            <h3>Gmail draft creation</h3>
+            <p>
+              Instead of sending an email automatically, the flow creates a draft. That makes testing safer,
+              preserves human oversight, and gives room to refine prompts and formatting before production use.
+            </p>
+            <ul>
+              <li>Processed text inserted into the body</li>
+              <li>Subject suggestions can be generated upstream</li>
+              <li>Human review stays part of the workflow</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="callout">
+        <h2>Why this workflow matters</h2>
+        <p>
+          The useful part is not just automation, but orchestration. Zapier acts as the control plane between cloud storage,
+          LLM analysis, cleanup logic, and communication tools. That combination reduces repetitive manual work while still preserving
+          a human-in-the-loop checkpoint where it matters.
+        </p>
+        <ul>
+          <li>Less manual review effort for incoming documents</li>
+          <li>Faster summarization with an LLM in the middle of the flow</li>
+          <li>Clean handoff between services without brittle custom glue code</li>
+          <li>Safer rollout through draft-first delivery</li>
+        </ul>
+      </section>
+
+      <section class="section">
+        <h2>Conclusion</h2>
+        <p>
+          This project shows how quickly AI-powered document handling can be assembled with modern automation tooling.
+          By combining Google Drive, Gemini, AI by Zapier, and Gmail, the workflow converts uploaded files into structured,
+          review-ready communication with very little manual intervention.
+        </p>
+        <p>
+          It is a practical pattern for teams that want to enrich cloud workflows with LLM capabilities without building an entire orchestration layer from scratch.
+        </p>
+        <a class="footer-link" href="/">Return to portfolio →</a>
+      </section>
+    </main>
+  </body>
+</html>

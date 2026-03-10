@@ -42,6 +42,15 @@ export const EXPERIENCE = [
 
 export const PROJECTS: Project[] = [
   {
+    id: "zapier-document-workflow",
+    title: "AI Document Workflow with Zapier",
+    description: "Article and visual walkthrough of a Zapier automation that monitors Google Drive, routes content through Gemini, cleans the output, and prepares Gmail drafts for review.",
+    tags: ["Zapier", "Gemini", "Google Drive", "Gmail", "Automation"],
+    demoUrl: "/articles/zapier-document-workflow/index.html",
+    demoLabel: "Read article",
+    imageUrl: "/Screenshot%202026-03-10%20at%2016.20.48.png",
+  },
+  {
     id: "hotel-booking",
     title: "Hotel Booking Demo",
     description: "A comprehensive booking system demo demonstrating modern Rails patterns and Hotwire.",

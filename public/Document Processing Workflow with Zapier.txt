@@ -1,0 +1,108 @@
+﻿Building an AI-Powered Document Processing Workflow with Zapier
+Automation platforms allow developers and automation engineers to connect multiple tools into intelligent workflows. In this project, I created an AI-powered automation pipeline using Zapier, integrating Google Drive, Gemini (LLM), AI by Zapier, and Gmail to automatically analyze files and prepare email-ready summaries.
+The system monitors a Google Drive folder, analyzes newly uploaded files using AI, formats the extracted text, and generates a Gmail draft for review.
+________________
+
+
+Workflow Architecture
+The automation consists of four main steps:
+1. Trigger: Google Drive – New File
+
+2. AI Processing: Gemini (Google AI Studio)
+
+3. Text Processing: AI by Zapier
+
+4. Output: Gmail Draft Creation
+
+This pipeline transforms a simple file upload into an automated document-processing workflow.
+________________
+
+
+Step 1: Google Drive Trigger
+The workflow begins with a Google Drive trigger that monitors a specific folder.
+Whenever a new file appears, Zapier automatically activates the workflow. This event-driven trigger ensures that documents can be processed immediately after they are uploaded.
+Typical file types used in this workflow include:
+   * Text documents
+
+   * Reports
+
+   * Structured notes
+
+   * Uploaded data files
+
+This step acts as the entry point for the automation pipeline.
+________________
+
+
+Step 2: AI Analysis with Gemini
+After the trigger fires, the document is sent to Gemini through Google AI Studio.
+Gemini performs the main AI processing tasks, such as:
+      * Reading the document content
+
+      * Understanding the context
+
+      * Extracting relevant text
+
+      * Preparing structured output for the next automation step
+
+Using an LLM at this stage allows the system to interpret the file rather than just pass raw data between applications.
+________________
+
+
+Step 3: Text Processing with AI by Zapier
+After Gemini processes the file, the workflow passes the output to AI by Zapier.
+This step cleans and prepares the text so it can be used directly inside Gmail.
+Example prompt used in the workflow:
+Return plain text suitable for Gmail, without any structural formatting or extra content.
+The input is provided as follows:
+{'parts': [{'text': 'Your text here'}]}.
+
+
+Please extract only the text from this input to use in the next steps.
+This ensures that:
+         * Only the clean text is extracted
+
+         * No unnecessary formatting is included
+
+         * The output is ready for email use
+
+The final result is structured text that can be passed directly into the email body.
+________________
+
+
+Step 4: Gmail Draft Creation
+The final step connects the automation to Gmail.
+Instead of automatically sending the email, the workflow creates a draft email containing:
+            * The processed text from the AI step
+
+            * A potential subject line
+
+            * Reference information from the uploaded file
+
+Creating a draft instead of sending the email allows:
+               * Safe testing of the automation
+
+               * Human review before sending
+
+               * Easy iteration during development
+
+________________
+
+
+Key Benefits of the Automation
+This workflow demonstrates the practical value of combining AI with automation platforms.
+Key advantages include:
+                  * Reduced manual work when reviewing documents
+
+                  * Automated summarization using LLMs
+
+                  * Seamless integration between cloud services
+
+                  * Human-in-the-loop validation via Gmail drafts
+
+________________
+
+
+Conclusion
+This project highlights how Zapier can act as an orchestration layer for AI-powered workflows. By integrating Google Drive, Gemini, AI by Zapier, and Gmail, the system automatically processes new files, extracts meaningful insights, and prepares email communication without manual intervention.
+Such workflows demonstrate how modern AI automation pipelines can significantly improve productivity, streamline document handling, and enable scalable intelligent processes.

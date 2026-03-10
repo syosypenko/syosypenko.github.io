@@ -1,24 +1,10 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { PROFILE, PROJECTS, SKILLS, EXPERIENCE } from './constants';
 import ProjectCard from './components/ProjectCard';
 
 const App: React.FC = () => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsDropdownOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [dropdownRef]);
 
   return (
     <div className="min-h-screen selection:bg-blue-500/30">
@@ -36,37 +22,16 @@ const App: React.FC = () => {
             <a href="#experience" className="text-sm font-medium text-slate-400 hover:text-white transition-colors">Experience</a>
             <a href="#projects" className="text-sm font-medium text-slate-400 hover:text-white transition-colors">Projects</a>
             <a href="#skills" className="text-sm font-medium text-slate-400 hover:text-white transition-colors">Tech Stack</a>
-            
-            <div className="relative" ref={dropdownRef}>
-              <button
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="px-5 py-2 rounded-lg bg-white/10 text-sm font-bold hover:bg-white/20 transition-all flex items-center gap-2 text-slate-200"
-              >
-                Download CV
-                <svg className={`w-4 h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
-              </button>
 
-              {isDropdownOpen && (
-                <div className="absolute top-full right-0 mt-2 w-48 bg-slate-900 border border-white/10 rounded-xl shadow-xl overflow-hidden z-50">
-                  <a
-                    href="/resume-serhiy-yosypenko.pdf"
-                    target="_blank"
-                    className="block px-4 py-3 text-sm text-slate-300 hover:bg-white/5 hover:text-white transition-colors"
-                    onClick={() => setIsDropdownOpen(false)}
-                  >
-                    English (PDF)
-                  </a>
-                  <a
-                    href="/resume-serhiy-yosypenko-de.pdf"
-                    target="_blank"
-                    className="block px-4 py-3 text-sm text-slate-300 hover:bg-white/5 hover:text-white transition-colors border-t border-white/5"
-                    onClick={() => setIsDropdownOpen(false)}
-                  >
-                    German (PDF)
-                  </a>
-                </div>
-              )}
-            </div>
+            <a
+              href="/resume-serhiy-yosypenko.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-5 py-2 rounded-lg bg-white/10 text-sm font-bold hover:bg-white/20 transition-all flex items-center gap-2 text-slate-200"
+            >
+              Download CV (EN)
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v14m0 0-6-6m6 6 6-6" /></svg>
+            </a>
 
             <a href={`mailto:${PROFILE.email}`} className="px-5 py-2 rounded-lg bg-blue-600 text-sm font-bold hover:bg-blue-500 transition-all shadow-lg shadow-blue-500/20">Hire Me</a>
           </div>
@@ -94,10 +59,7 @@ const App: React.FC = () => {
           
           <div className="flex flex-col items-center gap-4 w-full pt-4 border-t border-white/10">
             <p className="text-sm font-bold text-blue-500 uppercase tracking-widest">Download CV</p>
-            <div className="flex gap-4">
-               <a href="/resume-serhiy-yosypenko.pdf" target="_blank" className="px-4 py-2 bg-white/10 rounded-lg text-sm font-bold">English</a>
-               <a href="/resume-serhiy-yosypenko-de.pdf" target="_blank" className="px-4 py-2 bg-white/10 rounded-lg text-sm font-bold">German</a>
-            </div>
+            <a href="/resume-serhiy-yosypenko.pdf" target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-white/10 rounded-lg text-sm font-bold">English PDF</a>
           </div>
 
           <a href={`mailto:${PROFILE.email}`} className="px-8 py-3 rounded-xl bg-blue-600 text-lg font-bold hover:bg-blue-500 shadow-lg shadow-blue-500/20 w-full text-center">Hire Me</a>
@@ -118,7 +80,7 @@ const App: React.FC = () => {
               <span className="gradient-text">Systems.</span>
             </h1>
             <p className="text-xl text-slate-400 max-w-2xl leading-relaxed mb-10">
-              I'm <span className="text-white font-semibold">Serhiy Yosypenko</span>. A Senior Engineer with 8+ years crafting robust backends in Ruby and Python. From Redmine plugins to high-scale ad platforms, I build for maintainability and speed.
+              I'm <span className="text-white font-semibold">Serhiy Yosypenko</span>. A Software Engineer with 10+ years of experience building web applications, APIs, and integrations. I enjoy scalable systems, clean APIs, automation, and solving real-world problems. Open to backend &amp; full-stack opportunities — happy to connect!
             </p>
             <div className="flex flex-wrap gap-4 items-center">
               <a href="#projects" className="px-8 py-4 rounded-xl bg-white text-slate-950 font-bold hover:scale-105 transition-transform">
@@ -169,7 +131,8 @@ const App: React.FC = () => {
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
             <div>
               <p className="text-blue-500 font-bold tracking-widest uppercase text-xs mb-4">Portfolio Highlights</p>
-              <h2 className="text-4xl md:text-5xl font-black">Open Source Contributions</h2>
+              <h2 className="text-4xl md:text-5xl font-black">Selected Work</h2>
+              <p className="text-slate-400 mt-4 max-w-2xl">A mix of production-minded engineering demos and practical automation write-ups.</p>
             </div>
             <a href={PROFILE.github} target="_blank" className="text-sm font-bold text-slate-400 hover:text-white transition-colors flex items-center gap-2">
               Explore my projects on GitHub
